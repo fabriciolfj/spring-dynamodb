@@ -1,22 +1,31 @@
 package com.github.fabriciolfj.springdynamodb.config;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
-@EnableDynamoDBRepositories(basePackages = "com.github.fabriciolfj.springdynamodb.repositories")
 public class AppConfig {
 
     @Bean
-    public AmazonDynamoDB amazonDynamoDB() {
-        var credentials = new ProfileCredentialsProvider("default");
-        return AmazonDynamoDBClientBuilder
-                .standard()
-                .withCredentials(credentials)
+    public DynamoDbClient getDynamoDbClient() {
+        var credentials = DefaultCredentialsProvider.builder()
+                .profileName("default")
+                .build();
+
+        return DynamoDbClient.builder().region(Region.US_EAST_1)
+                .credentialsProvider(credentials)
+                .build();
+
+    }
+
+    @Bean
+    public DynamoDbEnhancedClient getDynamoDbEnchancedClient() {
+        return DynamoDbEnhancedClient.builder()
+                .dynamoDbClient(getDynamoDbClient())
                 .build();
     }
 }

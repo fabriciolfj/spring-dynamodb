@@ -1,0 +1,17 @@
+{
+  "customerId" : "001",
+  "orderId" : "002211",
+  "orderValue" : 200.00,
+  "products"  : [
+
+    {
+      "name" : "arroz",
+      "price" : 10.00
+    },
+
+    {
+      "name" : "feijao",
+      "price" : 7.87
+    }
+  ]
+}
